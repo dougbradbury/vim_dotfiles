@@ -93,6 +93,7 @@ endif
 autocmd FileType tex setlocal textwidth=78
 
 autocmd FileType ruby runtime ruby_mappings.vim
+autocmd FileType cs runtime dotnet_mappings.vim
 autocmd FileType python runtime python_mappings.vim
 autocmd FileType java runtime java_mappings.vim
 
@@ -103,13 +104,8 @@ let g:wstrip_highlight = 0
 " languages
 autocmd FileType ruby,java,python,c,cpp,sql,puppet let b:wstrip_auto = 1
 
-if version >= 700
-    autocmd BufNewFile,BufRead *.txt setlocal spell spelllang=en_us
-    autocmd FileType tex setlocal spell spelllang=en_us
-endif
-
-" Run terraform fmt on terraform files
-autocmd BufWritePre *.tf call terraform#fmt()
+autocmd BufNewFile,BufRead *.txt setlocal spell spelllang=en_us
+autocmd FileType tex,gitcommit setlocal spell spelllang=en_us
 
 " Status
 set laststatus=2
@@ -222,9 +218,9 @@ let g:sexp_enable_insert_mode_mappings = 0
 
 let g:puppet_align_hashes = 0
 
-let $FZF_DEFAULT_COMMAND = 'find . -name "*" -type f 2>/dev/null                                                         
+let $FZF_DEFAULT_COMMAND = 'find . -name "*" -type f 2>/dev/null
                             \ | grep -v -E "tmp\/|.gitmodules|.git\/|deps\/|_build\/|node_modules\/|vendor\/"
-                            \ | sed "s|^\./||"'                                                                          
+                            \ | sed "s|^\./||"'
 let $FZF_DEFAULT_OPTS = '--reverse'
 let g:fzf_tags_command = 'ctags -R --exclude=".git\|.svn\|log\|tmp\|db\|pkg" --extra=+f --langmap=Lisp:+.clj'
 let g:fzf_action = {
@@ -263,7 +259,6 @@ if executable('java-language-server')
     \ 'cmd': {server_info->['java-language-server', '--quiet']},
     \ 'whitelist': ['java'],
     \ })
-  autocmd FileType java nmap <buffer> <C-e> <plug>(lsp-document-diagnostics)
   autocmd FileType java nmap <buffer> <C-i> <plug>(lsp-hover)
   autocmd FileType java nmap <buffer> <C-]> <plug>(lsp-definition)
   autocmd FileType java nmap <buffer> gr <plug>(lsp-references)
@@ -326,7 +321,7 @@ map <silent> <LocalLeader>vx :wa<CR> :VimuxClosePanes<CR>
 map <silent> <LocalLeader>vp :VimuxPromptCommand<CR>
 vmap <silent> <LocalLeader>vs "vy :call VimuxRunCommand(@v)<CR>
 nmap <silent> <LocalLeader>vs vip<LocalLeader>vs<CR>
-map <silent> <LocalLeader>ds :call VimuxRunCommand('clear; grep -E "^ *describe[ \(]\|^ *context[ \(]\|^ *it[ \(]" ' . bufname("%"))<CR>
+map <silent> <LocalLeader>ds :call VimuxRunCommand('clear; grep -E "^ *describe[ \(]\|^ *context[ \(]\|^ *it[ \(]\|^ *specify[ \(]\|^ *example[ \(]" ' . bufname("%"))<CR>
 
 map <silent> <LocalLeader>rt :!ctags -R --exclude=".git\|.svn\|log\|tmp\|db\|pkg" --extra=+f --langmap=Lisp:+.clj<CR>
 
@@ -362,7 +357,7 @@ imap <C-L> <SPACE>=><SPACE>
 
 " ========= Functions ========
 
-command! SudoW w !sudo tee %
+command! SudoW w !sudo tee "%" > /dev/null
 
 " http://techspeak.plainlystated.com/2009/08/vim-tohtml-customization.html
 function! DivHtml(line1, line2)
@@ -392,12 +387,6 @@ function! Trim()
 endfunction
 command! -nargs=0 Trim :call Trim()
 nnoremap <silent> <Leader>cw :Trim<CR>
-
-function! StartInferiorSlimeServer()
-  let g:__InferiorSlimeRunning = 1
-  call VimuxRunCommand("inferior-slime")
-endfunction
-command! -nargs=0 StartInferiorSlimeServer :call StartInferiorSlimeServer()
 
 function! __Edge()
   colorscheme Tomorrow-Night
@@ -480,7 +469,12 @@ command! W w
 " https://vim.fandom.com/wiki/Reverse_order_of_lines
 command! -bar -range=% ReverseLines <line1>,<line2>g/^/m<line1>-1|nohl
 
-" Autoformat for bazel files
+" Initialize glaive if it's installed.
+if exists('*glaive#Install')
+  call glaive#Install()
+endif
+
+" Autoformat settings
 augroup autoformat_settings
   autocmd FileType bzl AutoFormatBuffer buildifier
 augroup END
