@@ -1,0 +1,26 @@
+[color]
+  ui = true
+[color "diff"]
+    meta = yellow normal
+[core]
+  editor = vim
+  excludesfile = "~/.gitignore"
+[alias]
+  co = checkout
+  ci = commit
+  st = status
+  stages = diff --staged
+  pr = pull --rebase
+	plog = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
+  l = log --graph --pretty=format':%C(yellow)%h%Cblue%d%Creset %s %C(white) %an, %ar%Creset'
+[github]
+  user = dougbradbury
+[user]
+  email = dbradbury@oneworldcoders.com
+  name = dougbradbury
+[push]
+  default = current
+
+[rerere]
+	enabled = true
+
