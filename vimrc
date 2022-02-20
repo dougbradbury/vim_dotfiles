@@ -547,6 +547,10 @@ inoremap <expr> <c-k> (pumvisible()?"\<C-p>":"\<c-k>")
 
 set tabline=%!MyTabLine()
 
+
+" Control-C to copy to system clipboard
+vnoremap <C-c> "+y
+
 " ========= Aliases ========
 
 command! W w
