@@ -627,3 +627,13 @@ endif
 if filereadable(expand('~/.vimrc_local'))
   source ~/.vimrc_local
 end
+
+fun! SetupCommandAlias(from, to)
+    exec 'cnoreabbrev <expr> '.a:from
+            \ .' ((getcmdtype() is# ":" && getcmdline() is# "'.a:from.'")'
+            \ .'? ("'.a:to.'") : ("'.a:from.'"))'
+endfun
+call SetupCommandAlias("Wa","wa")
+call SetupCommandAlias("WA","wa")
+call SetupCommandAlias("W","w")
+endfun
