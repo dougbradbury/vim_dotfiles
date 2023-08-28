@@ -161,8 +161,6 @@ let g:ruby_indent_assignment_style = 'variable'
 
 let g:no_html_toolbar = 'yes'
 
-let coffee_no_trailing_space_error = 1
-
 let NERDTreeIgnore=['\.pyc$', '\.o$', '\.class$', '\.lo$', 'tmp']
 let NERDTreeHijackNetrw = 0
 
@@ -636,4 +634,3 @@ endfun
 call SetupCommandAlias("Wa","wa")
 call SetupCommandAlias("WA","wa")
 call SetupCommandAlias("W","w")
-endfun
