@@ -119,7 +119,7 @@ set statusline+=%P                        " percentage of file
 " ========= Plugin Options ========
 
 let g:AckAllFiles = 0
-let g:AckCmd = 'ack --type-add ruby=.feature --ignore-dir=tmp 2> /dev/null'
+let g:ack_default_options = ' --type-add ruby=.feature --ignore-dir=tmp 2>/dev/null'
 
 " Visual * search, modified from: https://git.io/vFGBB
 function! s:VSetSearch()
@@ -428,6 +428,11 @@ map <silent> <LocalLeader>ws /\s\+$<CR>
 
 map <silent> <LocalLeader>pp :set paste!<CR>
 
+" vim-crosspaste map
+map <silent> <LocalLeader>qp :call CrossPaste()<CR>
+map <silent> <LocalLeader>qb :call CrossPasteBlock()<CR>
+map <silent> <LocalLeader>qq :call CrossPasteQuick()<CR>
+
 " YAML
 let g:vim_yaml_helper#auto_display_path = 1
 
@@ -577,19 +582,16 @@ function s:EnableShfmt()
   endif
   let l:git_cmd = 'git -C ' . l:git_dir . ' rev-parse --show-toplevel 2>/dev/null'
   let l:git_root = substitute(system(l:git_cmd), '\n\+$', '', '')
+  augroup shells
+    autocmd!
+    autocmd FileType sh setlocal expandtab
+  augroup END
   if v:shell_error == 0 && filereadable(l:git_root . '/.shfmt_disable')
-    augroup shells
-      autocmd!
-      autocmd FileType sh setlocal expandtab
-    augroup END
     if has_key(g:ale_fixers, 'sh')
       unlet g:ale_fixers.sh
     endif
   else
-    augroup shells
-      autocmd!
-      autocmd FileType sh setlocal noexpandtab
-    augroup END
+    let g:ale_sh_shfmt_options = "-i 2"
     let g:ale_fixers.sh = ['shfmt']
   endif
 endfunction
