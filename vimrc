@@ -161,10 +161,14 @@ let g:ruby_indent_assignment_style = 'variable'
 
 let g:no_html_toolbar = 'yes'
 
-let NERDTreeIgnore=['\.pyc$', '\.o$', '\.class$', '\.lo$', 'tmp']
+let NERDTreeIgnore=['\.pyc$', '\.o$', '\.class$', '\.lo$' ]
 let NERDTreeHijackNetrw = 0
+let g:NERDTreeSortOrder = ['[[-timestamp]]']
 
 let g:netrw_banner = 0
+
+" mkdx: 2-state checkbox (unchecked/checked, skip pending)
+let g:mkdx#settings = { 'checkbox': { 'toggles': [' ', 'x'] } }
 
 let g:VimuxUseNearestPane = 1
 

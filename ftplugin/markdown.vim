@@ -16,3 +16,11 @@ let g:markdown_fenced_languages = [
 \]
 " auto format markdown files with pandoc
 let g:ale_fixers['markdown'] = ['pandoc']
+
+" mkdx checkbox toggle
+nmap <buffer> <Space> <Plug>(mkdx-checkbox-next-n)
+vmap <buffer> <Space> <Plug>(mkdx-checkbox-next-v)
+
+" mkdx follow link
+nmap <buffer> <CR> <Plug>(mkdx-gx)
+vmap <buffer> <CR> <Plug>(mkdx-gx-visual)
